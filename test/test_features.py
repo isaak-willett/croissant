@@ -39,17 +39,17 @@ def test_area(roi, expected):
     [
         (
             [   # all ids, Rois input
-                {"id": 123, "coo_row": [0], "coo_col": [1],
-                 "coo_data": [1], "shape": (2, 3)},
-                {"id": 456, "coo_row": [1], "coo_col": [0],
-                 "coo_data": [1], "shape": (2, 3)},
+                {"id": 123, "coo_rows": [0], "coo_cols": [1],
+                 "coo_data": [1], "image_shape": (2, 3)},
+                {"id": 456, "coo_rows": [1], "coo_cols": [0],
+                 "coo_data": [1], "image_shape": (2, 3)},
             ],
             [   # traces
                 [1, 1, 1], [2, 2, 2],
             ],
             [   # metadata
-                {"imaging_depth": 120},
-                {"imaging_depth": 100},
+                {"depth": 120},
+                {"depth": 100},
             ],
             [123, 456],    # expected ids
             [   # expected rois data
@@ -59,17 +59,17 @@ def test_area(roi, expected):
         ),
         (
             [   # missing ids, Rois input
-                {"id": 123, "coo_row": [0], "coo_col": [1],
-                 "coo_data": [1], "shape": (2, 3)},
-                {"coo_row": [1], "coo_col": [0],
-                 "coo_data": [1], "shape": (2, 3)},
+                {"id": 123, "coo_rows": [0], "coo_cols": [1],
+                 "coo_data": [1], "image_shape": (2, 3)},
+                {"coo_rows": [1], "coo_cols": [0],
+                 "coo_data": [1], "image_shape": (2, 3)},
             ],
             [   # traces
                 [1, 1, 1], [2, 2, 2],
             ],
             [   # metadata
-                {"imaging_depth": 120},
-                {"imaging_depth": 100},
+                {"depth": 120},
+                {"depth": 100},
             ],
             [],    # expected ids
             [   # expected rois data
@@ -86,8 +86,8 @@ def test_area(roi, expected):
                 [1, 1, 1], [2, 2, 2],
             ],
             [   # metadata
-                {"imaging_depth": 120},
-                {"imaging_depth": 100},
+                {"depth": 120},
+                {"depth": 100},
             ],
             [],    # expected ids
             [   # expected rois data

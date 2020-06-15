@@ -12,20 +12,20 @@ import pandas as pd
 class Roi(TypedDict):
     """ROI mask image data.
     """
-    id: Optional[int]
+    roi_id: Optional[int]
     # Data for reconstructing mask on image planes
-    coo_row: List[int]
-    coo_col: List[int]
+    coo_rows: List[int]
+    coo_cols: List[int]
     coo_data: List[float]
-    shape: Tuple[int, int]
+    image_shape: Tuple[int, int]
 
 
 class RoiMetadata(TypedDict):
     """Metadata associated experiments from which ROIs were extracted.
     """
-    imaging_depth: int        # Microscope imaging depth
-    cre_line: str             # Mouse CRE line
-    target_area: str          # Targeted brain area (imaging)
+    depth: int        # Microscope imaging depth
+    full_genotype: str             # Mouse CRE line
+    targeted_structure: str          # Targeted brain area (imaging)
     rig: str                  # Name of imaging rig
 
 
@@ -79,8 +79,8 @@ class FeatureExtractor:
                 if id_:
                     roi_ids.append(id_)
                 coo_rois.append(coo_matrix((roi["coo_data"],
-                                (roi["coo_row"], roi["coo_col"])),
-                                roi["shape"]))
+                                (roi["coo_rows"], roi["coo_cols"])),
+                                roi["image_shape"]))
             if len(roi_ids) != len(rois):
                 roi_ids = []
         else:
@@ -176,10 +176,10 @@ class FeatureExtractor:
                 'trace_skew': skew of trace
                 'roi_area': area of ROI mask
                 'roi_ellipticalness': 'ellipticalness' of ROI mask
-                'target_area: targeted brain region
+                'targeted_structure: targeted brain region
                 'rig': imaging rig name
-                'imaging_depth': imaging depth (of plane)
-                'cre_line': CRE line of mouse
+                'depth': imaging depth (of plane)
+                'full_genotype': CRE line of mouse
         """
         trace_skew = list(map(skew, self.dff_traces))
         roi_area = list(map(self._area, self.rois))
@@ -204,8 +204,8 @@ def feature_pipeline() -> Pipeline:
     FeatureExtractor.
 
     One-hot-encodes categorical features:
-        cre_line
-        target_area
+        full_genotype
+        targeted_structure
         rig
     Include all other columns as numerical features.
 
@@ -215,12 +215,12 @@ def feature_pipeline() -> Pipeline:
         Unfitted pipeline to process features extracted from
         FeatureExtractor.
     """
-    categorical_cols = ["cre_line", "target_area", "rig"]
+    categorical_cols = ["full_genotype", "targeted_structure", "rig"]
     column_transformer = ColumnTransformer(
         transformers=[
-            ("onehot", OneHotEncoder(drop="if_binary"), categorical_cols)
+            ("onehot_cat", OneHotEncoder(drop="if_binary"), categorical_cols)
         ],
         remainder="passthrough")
     feature_pipeline = Pipeline(
-        steps=[column_transformer])
+        steps=[("onehot", column_transformer)])
     return feature_pipeline
