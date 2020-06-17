@@ -1,7 +1,7 @@
 from typing import Union, TypedDict, Optional, List, Tuple
 
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from scipy.sparse import coo_matrix
 from scipy.stats import skew
@@ -222,5 +222,6 @@ def feature_pipeline() -> Pipeline:
         ],
         remainder="passthrough")
     feature_pipeline = Pipeline(
-        steps=[("onehot", column_transformer)])
+        steps=[("onehot", column_transformer),
+               ("standard_scaling", StandardScaler())])
     return feature_pipeline

@@ -50,3 +50,8 @@ class TrainingSchema(argschema.ArgSchema):
         allow_none=True,
         description=("Path to a *.json file containing either a built "
                      "parameter grid (List[Dict[str: Any]]"))
+    mlflow_tracking_uri = argschema.fields.String(
+        required=False,
+        allow_none=True,
+        default=None,
+        description=("Tracking URI for mlflow"))
