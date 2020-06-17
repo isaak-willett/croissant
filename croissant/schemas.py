@@ -44,3 +44,9 @@ class TrainingSchema(argschema.ArgSchema):
                     "arguments to pass to the crossvalidator constructor. For "
                     "'groupkfold' need to also include `groups <name of "
                     "grouping column in input data>`."))
+    search_grid_path = argschema.fields.InputFile(
+        required=False,
+        default=None,
+        allow_none=True,
+        description=("Path to a *.json file containing either a built "
+                     "parameter grid (List[Dict[str: Any]]"))
